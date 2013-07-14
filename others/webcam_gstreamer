@@ -1,0 +1,14 @@
+
+Using gstreamer to manage webcam:
+
+* First install gstreamer-tools
+
+ - To save an avi video without any other thing:
+ 
+   gst-launch v4l2src device=/dev/video0 ! videorate ! avimux ! filesink location=video0.avi
+
+
+ - To real-time streaming:
+
+  > gst-launch-0.10 autovideosrc ! video/x-raw-yuv,framerate=\(fraction\)30/1,width=640,height=480 ! ffmpegcolorspace ! autovideosink
+  > (On Beaglebone) gst-launch-0.10 autovideosrc ! video/x-raw-yuv ! ffmpegcolorspace ! autovideosink

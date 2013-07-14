@@ -1,0 +1,19 @@
+Grab:
+https://www.kernel.org/pub/linux/kernel/v3.x/linux-3.2.tar.xz
+http://rcn-ee.net/deb/sid-armhf/v3.2.33-psp26/patch-3.2-psp26.diff.gz
+http://rcn-ee.net/deb/sid-armhf/v3.2.33-psp26/defconfig
+
+Extract 3.2 tar, apply 3.2-psp26.diff, copy defconfig as .config
+
+Point:
+/lib/modules/3.2.33-psp26/{source and build} to kernel source
+
+
+Or more general (on beaglebone), try:
+
+ - apt-cache search linux-headers | grep omap3
+ - sudo apt-get install "choosen-header"
+ - these headers are located at /usr/src and they are referenced from /lib/modules/"header", (by soft link)
+ If you are installing something and you need to set the kernel release, take it from lib/module
+
+Obs: To know your current linux-header version: uname -a

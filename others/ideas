@@ -1,0 +1,23 @@
+
+- Puede servir para la BeagleBone como para el LPCXpresso, pero para éste hay que armar un hardware que lo contenga
+
+- Alimentación:
+
+  - Se alimenta con una batería de 7.2v, que actua sobre los motores en forma directa, y pasa sobre por un circuito regulador para 
+    alimentar sensores y BeagleBone. CUIDADO: Los sensores digitales deben funcionar con 3.3v que es lo máximo que soportan los expansion headers, y el sensor analógico, que va conectado al ADC, debe tener una salida NO MAYOR a 1.8v.
+
+- Motores:
+  
+  - Uso los motores chicos, metálicos, con gran reducción, de Pololu. Para comandarlos es necesario armar una placa con puente H, porque ni la Beagle ni el LPCXpresso dropean tanta corriente. 
+
+- Sensores:
+  
+  - Sharp IR medidor de distancia.
+  - Sharp IR digital, solo mide que haya o no haya un objeto.
+  - Encoders IR, módulo pololu con sensores Sharp.
+
+- Logica de alto nivel:
+
+  - Linux + ROS + Python + Acceso a pines nativo de la Beaglebone
+
+

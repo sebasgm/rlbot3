@@ -1,0 +1,87 @@
+Para instalar ROS en una arquitectura no x386 (en este caso ARM), se requiere instalar desde ros sources porque los binarios existentes en la instalación convencional, no sirven.
+
+
+
+================================================================================
+Referencias:
+  - http://www.ros.org/wiki/electric/Installation/Ubuntu/Source
+  
+  - http://www.ros.org/wiki/fuerte/Installation/Ubuntu/Source (Cuidado, algunas cosas faltantes de acá las tomé del tutorial de electric o de otras fuentes)
+  
+  - http://people.willowgarage.com/straszheim/ros-cmake/walkthrough.html
+
+================================================================================
+
+
+-------------------------------------------------------------------------------
+
+1- Asumiendo que se instaló la version correcta de Ubuntu en la beaglebone (tengo que documentar eso), ejecutar:
+
+  $ sudo apt-get update
+
+--------------------------------------------------------------------------------
+
+2- Agrego el repositorio para ROS fuerte sources (Esto no figura en el tutorial de fuerte):
+
+  $ sh -c 'echo "deb http://packages.ros.org/ros/ubuntu precise main" > /etc/apt/sources.list.d/ros-latest.list'
+  $ wget http://packages.ros.org/ros.key -O - | sudo apt-key add -
+
+--------------------------------------------------------------------------------
+
+3- Agrego las herramientas necesarias para compilación de paquetes y bibliotecas que pide durante el proceso de instalación:
+
+  $ apt-get install build-essential python-yaml cmake subversion wget python-setuptools mercurial git-core python-yaml libapr1-dev libaprutil1-dev libbz2-dev python-dev python-empy python-nose libgtest-dev python-paramiko libboost1.48-all-dev liblog4cxx10-dev pkg-config python-wxgtk2.8 python-gtk2 libwxgtk2.8-dev libqt4-dev graphviz qt4-qmake swig avahi-daemon avahi-utils
+
+  $ pip install -U rosinstall rospkg rosdep         
+
+--------------------------------------------------------------------------------
+
+4- The following instructions will create a system install of the core ROS libraries and tools. The installation is done using standard CMake/make tools, so experts can adjust to their linking.
+
+ NOTA 1: Los repositorios github los baja por ssh con lo cual es necesario tener generadas claves públicas y privadas, o usar las veriones ssh de los paquetes cuando se pueda.
+ 
+ NOTA 2: El actionlib package da error porque ya no esta hosteado en el repo de github que figura en fuerte-ros-"lo-que-sea".rosinstall. Para que se instale correctamente hay que bajar este archivo a mano y editar el repo. Para solucionar esto con todos los paquetes que esten desactualizados, correr:
+
+ Ejecutar (por comodidad) en la workstation:
+
+  $ wget http://ros.org/rosinstalls/fuerte-ros-base.rosinstall
+  $ https://github.com/ros/rosdistro/blob/master/releases/fuerte.yaml
+
+ Abrir ambos archivos con un editor de text y mover del archivo fuerte.yaml al rosinstall, todos los repositorios desactualizados de rosinstall (no modificar el prefijo "uri" de los repositorios). Luego:
+
+  $ scp fuerte-ros-base.rosinstall root@192.168.1.3:~/ 
+
+ Una vez copiado el archivo rosinstall al home de la beaglebone, ejecutar:
+
+  $ rosinstall --catkin ~/ros-underlay file:fuerte-ros-base.rosinstall
+
+ NOTA: Si no se hace todo lo anterior la instalacion no se puede concretar porque se bajan solo algunos paquetes pero no se genera el CMakeList.txt, y/o da error la compilación.
+
+--------------------------------------------------------------------------------
+
+5- Ahora, para generar los makefiles y poder compilar los paquetes, ejecutar:
+
+  $ cd ~/ros-underlay
+  $ mkdir build
+  $ cd build
+  $ cmake .. -DCMAKE_INSTALL_PREFIX=/opt/ros/fuerte
+
+--------------------------------------------------------------------------------
+
+6- Luego se instalan los paquete compilados:
+
+  $ make 
+  $ sudo make install
+
+-------------------------------------------------------------------------------
+
+7- Ejecutar:
+
+  $ . /opt/ros/fuerte/setup.sh # Para exportar el entorno de trabajo
+  $ roscore
+
+ Si no se inicia roscore correctamente, no iniciarlo via ssh sino a traves de una terminal serie como screen. 
+
+
+
+ 

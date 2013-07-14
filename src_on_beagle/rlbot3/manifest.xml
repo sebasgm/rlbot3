@@ -1,0 +1,18 @@
+<package>
+  <description brief="rlbot3">
+
+     rlbot3
+
+  </description>
+  <author>sebastianmrra@gmail.com</author>
+  <license>BSD</license>
+  <review status="unreviewed" notes=""/>
+  <url>http://ros.org/wiki/rlbot3</url>
+
+ <export>
+    <cpp cflags="-I${prefix}/srv/cpp -I${prefix}/msg/cpp"/>
+  </export>
+
+</package>
+
+
